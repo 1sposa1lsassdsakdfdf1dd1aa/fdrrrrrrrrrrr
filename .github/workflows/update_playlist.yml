@@ -32,4 +32,4 @@ jobs:
         git commit -m "Updated playlist"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub's built-in token
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}  # ব্যবহার করুন আপনার Personal Access Token (PAT)

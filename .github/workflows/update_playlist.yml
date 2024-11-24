@@ -2,42 +2,34 @@ name: Update Playlist
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # প্রতি মিনিটে রান হবে
-  workflow_dispatch:  # ম্যানুয়ালি ট্রিগার করার জন্য
+    - cron: "*/1 * * * *"  # প্রতি ১ মিনিটে চালাবে
+  workflow_dispatch:  # ম্যানুয়ালি ট্রিগার করতে পারবেন
 
 jobs:
   update_playlist:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: কোড চেকআউট করুন
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: পাইথন পরিবেশ সেটআপ করুন
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.x"
 
-    # Step 3: প্রয়োজনীয় ডিপেন্ডেন্সি ইনস্টল করুন
     - name: Install dependencies
       run: pip install requests
 
-    # Step 4: প্লেলিস্ট আপডেট স্ক্রিপ্ট রান করুন
     - name: Run the playlist updater
       run: python update_playlist.py
 
-    # Step 5: কমিট এবং পুশ করুন
     - name: Commit and push changes
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         git add playlist.m3u
         git commit -m "Updated playlist"
-        
-        # GitHub টোকেন দিয়ে অথেন্টিকেশন করুন
-        git push https://github.com/${{ github.repository }}.git
-        with:
-          username: ${{ github.actor }}
-          token: ${{ secrets.GH_TOKEN }}
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub's built-in token
